@@ -1,6 +1,10 @@
 pipeline{
-    agent any
-
+    agent {
+        docker {
+            image 'docker:24'
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
+        }
+    }
 
     stages{
         stage("Checkout"){
@@ -24,7 +28,7 @@ pipeline{
         }
         stage("Health Check"){
             steps{
-                sh 'curl -f http://localhost:8000/'
+                sh 'docker exec ci-test curl -f http://localhost:8000/'
             }
         }
     }
